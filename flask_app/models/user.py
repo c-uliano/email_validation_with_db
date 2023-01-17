@@ -1,4 +1,9 @@
 from flask_app.config.mysqlconnection import connectToMySQL
+from flask import flash
+import re
+
+# added for email pattern validation
+EMAIL_REGEX = re.compile(r'^[a-zA-Z0-9.+_-]+@[a-zA-Z0-9._-]+\.[a-zA-Z]+$')
 
 class User:
     def __init__(self, data):
@@ -71,3 +76,39 @@ class User:
         return connectToMySQL('users_schema').query_db(query, data)
 # ? --------------------------------------
 
+
+
+# ? --------------------------------------
+    # valadate input fields
+    @staticmethod
+    def validate_form(data):
+        is_valid = True # we assume this is true
+
+        if len(data['fname']) < 3:
+            flash("First name must be at least 3 characters.")
+            is_valid = False
+        if len(data['lname']) < 3:
+            flash("Last name must be at least 3 characters.")
+            is_valid = False
+        if len(data['email']) < 5:
+            flash("Email must be at least 5 characters")
+            is_valid = False
+
+        return is_valid
+# ? --------------------------------------
+
+
+
+# ? --------------------------------------
+    # valadate email pattern 
+    @staticmethod
+    def validate_email(data):
+        is_valid = True
+
+        # if pattern doesn't match flash message
+        if not EMAIL_REGEX.match(data['email']): 
+            flash("Invalid email address!")
+            is_valid = False
+
+        return is_valid
+# ? --------------------------------------

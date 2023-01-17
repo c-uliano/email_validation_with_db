@@ -20,6 +20,17 @@ def add_user():
 # CREATE new user, POST data
 @app.route('/create/user', methods=['POST']) 
 def create_user():
+
+    # updated to include the input validation
+    # if it's not valid, redirects back to the form page so you can see the flash messages
+    if not User.validate_form(request.form):
+        return redirect("/add/user")
+
+    # updated to include email pattern validation
+    # if it's not valid, redirects back to the form page so you can see the flash messages
+    if not User.validate_email(request.form):
+        return redirect("/add/user")
+
     User.save(request.form)
 
     return redirect('/') 

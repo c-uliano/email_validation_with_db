@@ -13,6 +13,7 @@
         <div class="container mt-5">
             <div class="w-50 mx-auto card p-3">
                 <h1>Update {{ user.first_name }}'s Info</h1>
+                <!-- todo: add email validation to this form too -->
                 <form action="/update/user" method="post">
                     <input type="hidden" name="id" value="{{ user.id }}">
                     <div class="mb-3">

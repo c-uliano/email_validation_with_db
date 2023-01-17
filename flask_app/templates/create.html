@@ -13,6 +13,14 @@
         <div class="container mt-5">
             <div class="w-50 mx-auto card p-3">
                 <h1>Add New User</h1>
+    <!-- updated to include flash messages -->
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+                <p>{{message}}</p>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
                 <form action="/create/user" method="post">
                     <div class="mb-3">
                         <label for="first_name" class="form-label">First Name</label>
