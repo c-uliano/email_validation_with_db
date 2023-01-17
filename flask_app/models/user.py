@@ -112,3 +112,41 @@ class User:
 
         return is_valid
 # ? --------------------------------------
+
+
+
+# ? --------------------------------------
+# playing with combining all the validation into one methond
+    @staticmethod
+    def registration(data):
+        is_valid = True
+
+        if len(data['fname']) == 0:
+            flash("Please enter a first name.")
+            is_valid = False
+
+        if len(data['lname']) < 3:
+            flash("Last name must be at least 3 characters.")
+            is_valid = False
+
+        # * probably don't really need this if you're doing the regex for the email
+        # if len(data['email']) < 5:
+        #     flash("Email must be at least 5 characters")
+        #     is_valid = False
+
+        if not EMAIL_REGEX.match(data['email']): 
+            flash("Invalid email address!")
+            is_valid = False
+
+        # * if this had been a registration form this would be the validation for that
+        # * for a password input and confirm password input
+        # if len(data['password']) < 8:
+        #     flash("Password must be at least 8 characters", "register")
+        #     is_valid = False
+
+        # if data['password'] != data['password_confirm']:
+        #     flash("Passwords need to match","register")
+        #     is_valid = False
+
+
+        return is_valid

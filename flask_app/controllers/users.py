@@ -39,6 +39,13 @@ def create_user():
 
 
 # ? --------------------------------------
+# todo: combining all the validation into one method, update the above route to reflect that change
+
+# ? --------------------------------------
+
+
+
+# ? --------------------------------------
 # READ one user, show on frontend in filled-out form
 @app.route('/update/user/<int:id>') 
 def update_user(id):   
