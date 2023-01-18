@@ -2,6 +2,10 @@ from flask_app.config.mysqlconnection import connectToMySQL
 from flask import flash
 import re
 
+# is this needed in the model file? Didn't include it here during the class example
+# from flask_bcrypt import Bcrypt
+# bcrypt = Bcrypt(app)
+
 # added for email pattern validation
 EMAIL_REGEX = re.compile(r'^[a-zA-Z0-9.+_-]+@[a-zA-Z0-9._-]+\.[a-zA-Z]+$')
 
@@ -78,45 +82,74 @@ class User:
 
 
 
+
+# ? --------------------------------------
+    # READ user by email address, method used within another method in this file, for email validation, to see if an email address has already been registered
+    # ? this is how he did it in class. Different on the platform and from how I've been doing it
+    # @classmethod
+    # def get_by_email(cls, email):
+    #     query  = "SELECT * FROM users WHERE email = %(email)s;"
+
+    #     results = connectToMySQL('users_schema').query_db(query, {'email': email})
+
+    #     return cls(results[0]) if results else None
+
+    # ? this is how the platform is doing it
+    @classmethod
+    def get_by_email(cls, data):
+        query  = "SELECT * FROM users WHERE email = %(email)s;"
+
+        result = connectToMySQL('users_schema').query_db(query, data)
+
+        # * if there's nothing in the database for this query
+        if len(result) < 1:
+            return False
+
+        return cls(result[0]) if result else None
+# ? --------------------------------------
+
+
+
 # ? --------------------------------------
     # valadate input fields
-    @staticmethod
-    def validate_form(data):
-        is_valid = True # we assume this is true
+    # @staticmethod
+    # def validate_form(data):
+    #     is_valid = True # we assume this is true
 
-        if len(data['fname']) < 3:
-            flash("First name must be at least 3 characters.")
-            is_valid = False
-        if len(data['lname']) < 3:
-            flash("Last name must be at least 3 characters.")
-            is_valid = False
-        if len(data['email']) < 5:
-            flash("Email must be at least 5 characters")
-            is_valid = False
+    #     if len(data['fname']) < 3:
+    #         flash("First name must be at least 3 characters.")
+    #         is_valid = False
+    #     if len(data['lname']) < 3:
+    #         flash("Last name must be at least 3 characters.")
+    #         is_valid = False
+    #     if len(data['email']) < 5:
+    #         flash("Email must be at least 5 characters")
+    #         is_valid = False
 
-        return is_valid
+    #     return is_valid
 # ? --------------------------------------
 
 
 
 # ? --------------------------------------
     # valadate email pattern 
-    @staticmethod
-    def validate_email(data):
-        is_valid = True
+    # @staticmethod
+    # def validate_email(data):
+    #     is_valid = True
 
-        # if pattern doesn't match flash message
-        if not EMAIL_REGEX.match(data['email']): 
-            flash("Invalid email address!")
-            is_valid = False
+    #     # if pattern doesn't match flash message
+    #     if not EMAIL_REGEX.match(data['email']): 
+    #         flash("Invalid email address!")
+    #         is_valid = False
 
-        return is_valid
+    #     return is_valid
 # ? --------------------------------------
 
 
 
 # ? --------------------------------------
-# playing with combining all the validation into one methond
+    # playing with combining all the validation into one methond
+    # ! how to make the content already added in the form stay even when the flash messages appear??
     @staticmethod
     def registration(data):
         is_valid = True
@@ -134,6 +167,11 @@ class User:
         #     flash("Email must be at least 5 characters")
         #     is_valid = False
 
+        # to check if an email address is already registered. Requires another classmethod, added above
+        if User.get_by_email(data['email_address']):
+            flash("Email already taken")
+            is_valid = False
+
         if not EMAIL_REGEX.match(data['email']): 
             flash("Invalid email address!")
             is_valid = False
@@ -150,3 +188,13 @@ class User:
 
 
         return is_valid
+# ? --------------------------------------
+
+
+
+# ? --------------------------------------
+    # * if this has included a login page this is what would be used
+    @staticmethod
+    def login(data):
+        pass
+# ? --------------------------------------
