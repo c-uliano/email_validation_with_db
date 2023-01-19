@@ -191,12 +191,3 @@ class User:
 
         return is_valid
 # ? --------------------------------------
-
-
-
-# ? --------------------------------------
-    # * if this has included a login page this is what would be used
-    @staticmethod
-    def login(data):
-        pass
-# ? --------------------------------------
