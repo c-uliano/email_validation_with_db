@@ -17,6 +17,8 @@ class User:
         self.email = data['email']
         self.created_at = data['created_at']
         self.updated_at = data['updated_at']
+        # * if this site had login, don't forget this
+        # self.password = data['password']
 
 
 
@@ -102,7 +104,7 @@ class User:
         result = connectToMySQL('users_schema').query_db(query, data)
 
         # * if there's nothing in the database for this query
-        if len(result) < 1:
+        if len(result) == 0:
             return False
 
         return cls(result[0]) if result else None
@@ -167,7 +169,7 @@ class User:
         #     flash("Email must be at least 5 characters")
         #     is_valid = False
 
-        # to check if an email address is already registered. Requires another classmethod, added above
+        # * to check if an email address is already registered. Requires another classmethod, added above
         if User.get_by_email(data['email_address']):
             flash("Email already taken")
             is_valid = False
